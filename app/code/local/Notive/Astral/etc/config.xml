@@ -1,0 +1,159 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Notive_Astral>
+            <version>1.1.3</version>
+        </Notive_Astral>
+    </modules>
+    <global>
+        <helpers>
+            <astral>
+                <class>Notive_Astral_Helper</class>
+            </astral>
+        </helpers>
+        <models>
+            <notive_astral>
+                <class>Notive_Astral_Model</class>
+            </notive_astral>
+        </models>
+        <blocks>
+            <adminhtml>
+                <rewrite>
+                    <sales_order_view>Notive_Astral_Block_Adminhtml_Sales_Order_View</sales_order_view>
+                </rewrite>
+            </adminhtml>
+            <astral>
+                <class>Notive_Astral_Block</class>
+            </astral>
+        </blocks>
+        <events>
+            <sales_order_save_after>
+                <observers>
+                    <Notive_Astral>
+                        <type>singleton</type>
+                        <class>Notive_Astral_Model_Observers_Order</class>
+                        <method>sales_order_save_after</method>
+                    </Notive_Astral>
+                </observers>
+            </sales_order_save_after>
+        </events>
+        <resources>
+            <notive_astral_setup>
+                <setup>
+                    <module>Notive_Astral</module>
+                    <class>Notive_Astral_Model_Resource_Setup</class>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </notive_astral_setup>
+        </resources>
+        <sales>
+            <order>
+                <statuses>
+                    <notive_astral_sent translate="label">
+                        <label>Sent To Astral</label>
+                    </notive_astral_sent>
+                    <notive_astral_error translate="label">
+                        <label>Not Sent To Astral</label>
+                    </notive_astral_error>
+                </statuses>
+                <states>
+                    <holded translate="label">
+                        <statuses>
+                            <notive_astral_error />
+                        </statuses>
+                    </holded>
+                    <processing translate="label">
+                        <statuses>
+                            <notive_astral_sent />
+                        </statuses>
+                    </processing>
+                </states>
+            </order>
+        </sales>
+    </global>
+
+    <default>
+        <Notive_Astral>
+            <order>
+                <status_send>processing</status_send>
+                <article_code_field>sku</article_code_field>
+            </order>
+        </Notive_Astral>
+    </default>
+
+    <admin>
+        <routers>
+            <astral>
+                <use>admin</use>
+                <args>
+                    <module>Notive_Astral</module>
+                    <frontName>astral</frontName>
+                </args>
+            </astral>
+        </routers>
+    </admin>
+    <adminhtml>
+        <!-- Used for testing: 
+        <menu>
+            <system>
+                <children>
+                    <astral_test translate="title" module="astral">
+                        <title>Astral Test</title>
+                        <action>astral/adminhtml_astralbackend</action>
+                    </astral_test>
+                    <astral_order translate="title" module="astral">
+                        <title>Astral Order</title>
+                        <action>astral/sales_order</action>
+                    </astral_order>
+                </children>
+            </system>
+        </menu>
+        -->
+        <acl>
+            <resources>
+                <all>
+                    <title>Allow Everything</title>
+                </all>
+                <admin>
+                    <children>
+                        <system>
+                            <children>
+                                <config>
+                                    <children>
+                                        <Notive_Astral translate="title">
+                                            <title>Astral Settings</title>
+                                        </Notive_Astral>
+                                    </children>
+                                </config>
+                            </children>
+                        </system>
+                    </children>
+                </admin>
+            </resources>
+        </acl>
+    </adminhtml>
+
+
+    <crontab>
+        <jobs>
+            <notive_order_cron>
+                <schedule>
+                    <cron_expr>0 * * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>notive_astral/cron::runOrders</model>
+                </run>
+            </notive_order_cron>
+            <notive_stock_cron>
+                <schedule>
+                    <cron_expr>15 * * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>notive_astral/cron::runStock</model>
+                </run>
+            </notive_stock_cron>
+        </jobs>
+    </crontab>
+</config>
