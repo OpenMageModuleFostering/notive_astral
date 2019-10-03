@@ -1,16 +1,19 @@
 {
-    "name": "OpenMageModuleFostering/Notive_Astral",
+    "name": "OpenMageModuleFostering\/Notive_Astral",
     "type": "magento-module",
     "license": "OSL-3.0",
     "homepage": "",
     "description": "Connect your Magento store to the Astral Music backoffice.",
     "authors": [
-    {
-        "name": "Ferry Koster",
-        "email": "info@notive.nl"
-    }
-],
+        {
+            "name": "Ferry Koster",
+            "email": "info@notive.nl"
+        }
+    ],
     "suggest": {
-        "magento-hackathon/magento-composer-installer": "*"
-    }
+        "magento-hackathon\/magento-composer-installer": "*"
+    },
+    "keywords": [
+        "openmage-module"
+    ]
 }
